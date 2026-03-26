@@ -53,6 +53,23 @@ app.post('/api/auth/admin/login', async (req, res) => {
   res.json({ token })
 })
 
+app.post('/api/auth/admin/register', async (req, res) => {
+  const { email, password, secret } = req.body || {}
+  if (!email || !password || !secret) return res.status(400).json({ error: 'Missing fields' })
+  if (secret !== (process.env.ADMIN_SECRET || 'letmein')) {
+    return res.status(403).json({ error: 'Invalid admin secret' })
+  }
+  const exists = await query('SELECT 1 FROM admins WHERE email=$1', [email])
+  if (exists.rowCount) return res.status(400).json({ error: 'Email already registered' })
+  const hash = await bcrypt.hash(password, 10)
+  const { rows } = await query(
+    'INSERT INTO admins (email, password_hash) VALUES ($1,$2) RETURNING id, email',
+    [email, hash],
+  )
+  const token = jwt.sign({ id: rows[0].id, email }, JWT_SECRET, { expiresIn: '12h' })
+  res.status(201).json({ token })
+})
+
 app.post('/api/auth/register', async (req, res) => {
   const { email, password } = req.body || {}
   if (!email || !password) return res.status(400).json({ error: 'Missing fields' })

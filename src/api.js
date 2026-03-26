@@ -35,6 +35,11 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     }),
+  adminRegister: (email, password, secret) =>
+    request('/auth/admin/register', {
+      method: 'POST',
+      body: JSON.stringify({ email, password, secret }),
+    }),
   createProduct: (data, token) =>
     request('/products', { method: 'POST', body: JSON.stringify(data), token }),
   updateProduct: (id, data, token) =>

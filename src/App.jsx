@@ -10,6 +10,7 @@ import DashboardPage from './pages/DashboardPage'
 import AuthPage from './pages/AuthPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
+import AdminRegisterPage from './pages/AdminRegisterPage'
 import './index.css'
 
 function LayoutShell({ children }) {
@@ -90,6 +91,10 @@ export default function App() {
             <Route
               path="/admin/login"
               element={<AdminLoginPage onAuthed={(t) => { setToken(t); localStorage.setItem('adminToken', t) }} />}
+            />
+            <Route
+              path="/admin/register"
+              element={<AdminRegisterPage onAuthed={(t) => { setToken(t); localStorage.setItem('adminToken', t) }} />}
             />
             <Route path="/admin" element={<AdminDashboardPage token={token} />} />
             <Route
