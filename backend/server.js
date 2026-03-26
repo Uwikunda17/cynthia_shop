@@ -131,22 +131,22 @@ app.get('/api/products', async (_req, res) => {
 })
 
 app.post('/api/products', authGuard, async (req, res) => {
-  const { name, price, sizes = [], colors = [], image, description, category_id } = req.body || {}
+  const { name, price, sizes = [], colors = [], image, images = [], description, category_id } = req.body || {}
   const { rows } = await query(
-    `INSERT INTO products (name, price, sizes, colors, image, description, category_id)
-     VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING *`,
-    [name, price, sizes, colors, image, description, category_id],
+    `INSERT INTO products (name, price, sizes, colors, image, images, description, category_id)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+    [name, price, sizes, colors, image, images, description, category_id],
   )
   res.status(201).json(rows[0])
 })
 
 app.put('/api/products/:id', authGuard, async (req, res) => {
   const { id } = req.params
-  const { name, price, sizes = [], colors = [], image, description, category_id } = req.body || {}
+  const { name, price, sizes = [], colors = [], image, images = [], description, category_id } = req.body || {}
   const { rows } = await query(
-    `UPDATE products SET name=$1, price=$2, sizes=$3, colors=$4, image=$5, description=$6, category_id=$7, updated_at=now()
-     WHERE id=$8 RETURNING *`,
-    [name, price, sizes, colors, image, description, category_id, id],
+    `UPDATE products SET name=$1, price=$2, sizes=$3, colors=$4, image=$5, images=$6, description=$7, category_id=$8, updated_at=now()
+     WHERE id=$9 RETURNING *`,
+    [name, price, sizes, colors, image, images, description, category_id, id],
   )
   res.json(rows[0])
 })

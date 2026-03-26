@@ -11,6 +11,7 @@ export default function AdminDashboardPage({ token }) {
     sizes: '',
     colors: '',
     image: '',
+    images: '',
     description: '',
     category_id: '',
   })
@@ -47,6 +48,10 @@ export default function AdminDashboardPage({ token }) {
         ...form,
         sizes: form.sizes.split(',').map((s) => s.trim()).filter(Boolean),
         colors: form.colors.split(',').map((s) => s.trim()).filter(Boolean),
+        images: form.images
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean),
         price: Number(form.price || 0),
       }
       const created = await api.createProduct(payload, token)
@@ -57,6 +62,7 @@ export default function AdminDashboardPage({ token }) {
         sizes: '',
         colors: '',
         image: '',
+        images: '',
         description: '',
         category_id: '',
       })
@@ -161,6 +167,7 @@ export default function AdminDashboardPage({ token }) {
               />
             )}
           </div>
+          <textarea className="input-dark" placeholder="gallery images (comma separated urls)" value={form.images} onChange={(e) => setForm({ ...form, images: e.target.value })} />
           <textarea className="input-dark" placeholder="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <select
             className="input-dark"
