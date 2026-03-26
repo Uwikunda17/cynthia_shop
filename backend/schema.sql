@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS products (
   sizes TEXT[] DEFAULT '{}',
   colors TEXT[] DEFAULT '{}',
   image TEXT,
+  images TEXT[] DEFAULT '{}',
   description TEXT,
   category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),

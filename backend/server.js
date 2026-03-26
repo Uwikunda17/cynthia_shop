@@ -178,7 +178,7 @@ app.post('/api/orders', userGuard, async (req, res) => {
   const { items = [], total = 0 } = req.body || {}
   const { rows } = await query(
     'INSERT INTO orders (user_id, status, total, items) VALUES ($1,$2,$3,$4) RETURNING *',
-    [req.user.id, 'pending', total, items],
+    [req.user.id, 'pending', total, JSON.stringify(items)],
   )
   res.status(201).json(rows[0])
 })

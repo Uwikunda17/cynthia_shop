@@ -89,10 +89,10 @@ export default function Header({ cartCount = 0, onOpenCart, userToken, onLogout 
           justify-content: center;
           width: 44px;
           height: 44px;
-          background: #ffffff;
+          background: #ffffff00;
           border-radius: 8px;
           flex-shrink: 0;
-          box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
         }
 
         .logo-badge img {
