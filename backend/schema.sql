@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS orders (
   user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
   status TEXT DEFAULT 'pending',
   total NUMERIC(10,2) DEFAULT 0,
+  items JSONB DEFAULT '[]'::jsonb,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );

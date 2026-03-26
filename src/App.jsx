@@ -11,6 +11,7 @@ import AuthPage from './pages/AuthPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
 import AdminRegisterPage from './pages/AdminRegisterPage'
+import { api } from './api'
 import './index.css'
 
 function LayoutShell({ children }) {
@@ -27,6 +28,7 @@ export default function App() {
   const [showCart, setShowCart] = useState(false)
   const [token, setToken] = useState(() => localStorage.getItem('adminToken') || '')
   const [userToken, setUserToken] = useState(() => localStorage.getItem('userToken') || '')
+  const [checkoutState, setCheckoutState] = useState({ status: 'idle', error: '' })
 
   const addToCart = (product) => {
     const priceNumber = Number(
@@ -38,6 +40,37 @@ export default function App() {
 
   const removeFromCart = (index) => {
     setCart((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const checkout = async () => {
+    if (!userToken) {
+      window.location.href = '/login'
+      return
+    }
+    if (!cart.length) return
+    try {
+      setCheckoutState({ status: 'loading', error: '' })
+      const total = cart.reduce((sum, item) => sum + (item.priceNumber || 0), 0)
+      await api.createOrder(
+        cart.map((c) => ({
+          id: c.id,
+          name: c.name,
+          price: c.priceNumber,
+          image: c.image,
+          sizes: c.sizes,
+          colors: c.colors,
+        })),
+        total,
+        userToken,
+      )
+      setCart([])
+      setShowCart(false)
+      setCheckoutState({ status: 'success', error: '' })
+    } catch (err) {
+      setCheckoutState({ status: 'error', error: err.message })
+    } finally {
+      setTimeout(() => setCheckoutState({ status: 'idle', error: '' }), 1800)
+    }
   }
 
   return (
@@ -145,6 +178,8 @@ export default function App() {
           items={cart}
           onClose={() => setShowCart(false)}
           onRemove={removeFromCart}
+          onCheckout={checkout}
+          state={checkoutState}
         />
       )}
     </Router>

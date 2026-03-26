@@ -51,4 +51,10 @@ export const api = {
   getOrders: (token) => request('/orders', { token }),
   updateOrder: (id, status, token) =>
     request(`/orders/${id}`, { method: 'PATCH', body: JSON.stringify({ status }), token }),
+  createOrder: (items, total, token) =>
+    request('/orders', {
+      method: 'POST',
+      body: JSON.stringify({ items, total }),
+      token,
+    }),
 }

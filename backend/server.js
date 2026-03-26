@@ -174,5 +174,14 @@ app.patch('/api/orders/:id', authGuard, async (req, res) => {
   res.json(rows[0])
 })
 
+app.post('/api/orders', userGuard, async (req, res) => {
+  const { items = [], total = 0 } = req.body || {}
+  const { rows } = await query(
+    'INSERT INTO orders (user_id, status, total, items) VALUES ($1,$2,$3,$4) RETURNING *',
+    [req.user.id, 'pending', total, items],
+  )
+  res.status(201).json(rows[0])
+})
+
 const PORT = process.env.PORT || 4000
 app.listen(PORT, () => console.log(`Backend running on http://localhost:${PORT}`))

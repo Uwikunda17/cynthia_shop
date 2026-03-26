@@ -180,30 +180,45 @@ export default function AdminDashboardPage({ token }) {
         </form>
       </div>
 
-      <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
+      <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3 overflow-x-auto">
         <h2 className="text-xl font-semibold text-white">Products</h2>
-        <div className="grid gap-3">
-          {products.map((p) => (
-            <div
-              key={p.id}
-              className="flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-3"
-            >
-              <div>
-                <p className="font-semibold text-white">{p.name}</p>
-                <p className="text-sm text-slate-400">{p.category_title}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-accent font-semibold">${p.price}</span>
-                <button
-                  onClick={() => removeProduct(p.id)}
-                  className="text-sm text-red-400 hover:text-red-300"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <table className="min-w-full text-sm text-slate-200">
+          <thead className="text-left text-slate-400">
+            <tr className="border-b border-slate-800">
+              <th className="py-2 pr-3">Image</th>
+              <th className="py-2 pr-3">Name</th>
+              <th className="py-2 pr-3">Category</th>
+              <th className="py-2 pr-3">Price</th>
+              <th className="py-2 pr-3">Sizes</th>
+              <th className="py-2 pr-3">Colors</th>
+              <th className="py-2 pr-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((p) => (
+              <tr key={p.id} className="border-b border-slate-900 hover:bg-slate-900/60">
+                <td className="py-2 pr-3">
+                  {p.image && (
+                    <img src={p.image} alt={p.name} className="w-14 h-14 object-cover rounded-lg border border-slate-800" />
+                  )}
+                </td>
+                <td className="py-2 pr-3 font-semibold text-white">{p.name}</td>
+                <td className="py-2 pr-3 text-slate-400">{p.category_title || p.category_id}</td>
+                <td className="py-2 pr-3 text-accent font-semibold">${p.price}</td>
+                <td className="py-2 pr-3 text-slate-300">{(p.sizes || []).join(', ')}</td>
+                <td className="py-2 pr-3 text-slate-300">{(p.colors || []).join(', ')}</td>
+                <td className="py-2 pr-3">
+                  <button
+                    onClick={() => removeProduct(p.id)}
+                    className="text-sm text-red-400 hover:text-red-300"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
 
       <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-3">
