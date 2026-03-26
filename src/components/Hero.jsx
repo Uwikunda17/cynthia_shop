@@ -5,23 +5,28 @@ export default function Hero({ images }) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
+    if (!images || images.length === 0) return
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length)
     }, 4200)
     return () => clearInterval(id)
-  }, [images.length])
+  }, [images])
 
-  const current = images[index]
+  const current = images?.[index] || ''
 
   return (
     <section className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] bg-slate-950 overflow-hidden">
       <div className="relative overflow-hidden min-h-screen">
-        <img
-          src={current}
-          alt="Featured"
-          className="absolute inset-0 w-full h-full object-cover"
-          key={current}
-        />
+        {images?.map((img, i) => (
+          <img
+            key={img}
+            src={img}
+            alt="Featured"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+              i === index ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/55 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/55" />
 
